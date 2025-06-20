@@ -128,43 +128,44 @@ export class RegisterComponent implements OnInit {
 
     this.passwordStrength = { score, label, class: className }
   }
-
   onSubmit(): void {
     if (this.registerForm.invalid) {
-      this.markFormGroupTouched()
-      return
+      this.markFormGroupTouched();
+      return;
     }
 
-    this.isLoading = true
-    this.errorMessage = ""
-    this.successMessage = ""
+    this.isLoading = true;
+    this.errorMessage = "";
+    this.successMessage = "";
 
     const userData = {
       fullName: this.f["fullName"].value,
       email: this.f["email"].value,
       password: this.f["password"].value,
-      confirmPassword: this.f["confirmPassword"].value,
-      terms: this.f["terms"].value,
-    }
+    };
 
     this.authService.register(userData).subscribe({
-      next: (response) => {
-        this.isLoading = false
-        if (response.success) {
-          this.successMessage = response.message
-          // Redirect to login after successful registration
-          setTimeout(() => {
-            this.router.navigate(["/auth/login"])
-          }, 2000)
-        } else {
-          this.errorMessage = response.message
-        }
+      next: () => {
+        this.isLoading = false;
+        this.successMessage = "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.";
+
+        setTimeout(() => {
+          this.router.navigate(["/auth/login"]);
+        }, 2000);
       },
       error: (error) => {
-        this.isLoading = false
-        this.errorMessage = "Có lỗi xảy ra. Vui lòng thử lại."
+        this.isLoading = false;
+
+        // Nếu backend trả lỗi 409 (email đã tồn tại) hoặc 400 (form sai)
+        if (error.status === 409) {
+          this.errorMessage = "Email đã được sử dụng.";
+        } else if (error.status === 400) {
+          this.errorMessage = "Thông tin đăng ký không hợp lệ.";
+        } else {
+          this.errorMessage = "Có lỗi xảy ra. Vui lòng thử lại.";
+        }
       },
-    })
+    });
   }
 
   private markFormGroupTouched(): void {

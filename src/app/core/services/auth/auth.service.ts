@@ -1,107 +1,82 @@
-import { Injectable } from "@angular/core"
-import type { HttpClient } from "@angular/common/http"
-import { BehaviorSubject, type Observable, of } from "rxjs"
-import { delay, map, catchError } from "rxjs/operators"
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { TokenService } from './token.service';
 
-export interface User {
-  id: string
-  email: string
-  fullName: string
+export interface LoginDto {
+  email: string;
+  password: string;
 }
-
-export interface LoginRequest {
-  email: string
-  password: string
+export interface RegisterDto {
+  email: string;
+  password: string;
+  fullName: string;
 }
-
-export interface RegisterRequest {
-  fullName: string
-  email: string
-  password: string
-  confirmPassword: string
-  terms: boolean
+export interface ActivateAccountDto {
+  email: string;
+  code: string;
 }
-
 export interface AuthResponse {
-  success: boolean
-  message: string
-  user?: User
-  token?: string
+  accessToken: string;
+  refreshToken: string;
+  roles: string[];
 }
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<User | null>(null)
-  public currentUser$ = this.currentUserSubject.asObservable()
+  private baseUrl = `${environment.apiUrl}/auth`;
 
-  constructor() {
-    // Check if user is already logged in
-    const savedUser = localStorage.getItem("currentUser")
-    if (savedUser) {
-      this.currentUserSubject.next(JSON.parse(savedUser))
-    }
+  constructor(
+    private http: HttpClient,
+    private tokenService: TokenService
+  ) { }
+
+  login(data: LoginDto): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, data).pipe(
+      tap((res) => {
+        this.tokenService.setTokens(res.accessToken, res.refreshToken);
+        localStorage.setItem('roles', JSON.stringify(res.roles));
+      })
+    );
   }
 
-  login(credentials: LoginRequest): Observable<AuthResponse> {
-    // Simulate API call
-    return of({
-      success: true,
-      message: "Đăng nhập thành công!",
-      user: {
-        id: "1",
-        email: credentials.email,
-        fullName: "Người dùng",
-      },
-      token: "fake-jwt-token",
-    }).pipe(
-      delay(2000), // Simulate network delay
-      map((response) => {
-        if (response.success && response.user) {
-          localStorage.setItem("currentUser", JSON.stringify(response.user))
-          localStorage.setItem("token", response.token || "")
-          this.currentUserSubject.next(response.user)
-        }
-        return response
-      }),
-      catchError((error) => {
-        return of({
-          success: false,
-          message: "Đăng nhập thất bại. Vui lòng thử lại.",
-        })
-      }),
-    )
+  register(data: RegisterDto): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/register`, data);
   }
 
-  register(userData: RegisterRequest): Observable<AuthResponse> {
-    // Simulate API call
-    return of({
-      success: true,
-      message: "Tài khoản đã được tạo thành công! Vui lòng kiểm tra email để xác thực.",
-      user: {
-        id: "1",
-        email: userData.email,
-        fullName: userData.fullName,
-      },
-    }).pipe(
-      delay(2000), // Simulate network delay
-      catchError((error) => {
-        return of({
-          success: false,
-          message: "Đăng ký thất bại. Vui lòng thử lại.",
-        })
-      }),
-    )
+  activateAccount(data: ActivateAccountDto): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/activate-account`, data);
   }
 
-  logout(): void {
-    localStorage.removeItem("currentUser")
-    localStorage.removeItem("token")
-    this.currentUserSubject.next(null)
+  resendActivation(email: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/resend-activation`, { email });
   }
 
-  get currentUserValue(): User | null {
-    return this.currentUserSubject.value
+  refreshToken(): Observable<AuthResponse> {
+    const refreshToken = this.tokenService.refreshToken;
+    return this.http.post<AuthResponse>(`${this.baseUrl}/refresh-token`, { refreshToken }).pipe(
+      tap((res) => {
+        this.tokenService.setTokens(res.accessToken, res.refreshToken);
+      })
+    );
+  }
+
+  logout() {
+    this.tokenService.clear();
+    localStorage.removeItem('roles');
+  }
+
+  getRoles(): string[] {
+    const raw = localStorage.getItem('roles');
+    return raw ? JSON.parse(raw) : [];
+  }
+
+  getToken(): string | null {
+    return this.tokenService.accessToken;
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
   }
 }

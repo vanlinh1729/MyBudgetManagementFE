@@ -62,22 +62,23 @@ export class LoginComponent implements OnInit {
     }
 
     this.authService.login(credentials).subscribe({
-      next: (response) => {
-        this.isLoading = false
-        if (response.success) {
-          this.successMessage = response.message
-          // In a real app, redirect to dashboard
-          setTimeout(() => {
-            // this.router.navigate(['/dashboard']);
-            console.log("Redirect to dashboard")
-          }, 1000)
-        } else {
-          this.errorMessage = response.message
-        }
+      next: () => {
+        this.isLoading = false;
+        this.successMessage = 'Đăng nhập thành công! Đang chuyển hướng...';
+
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 800); // delay nhẹ để hiển thị thông báo
       },
       error: (error) => {
-        this.isLoading = false
-        this.errorMessage = "Có lỗi xảy ra. Vui lòng thử lại."
+        this.isLoading = false;
+
+        if (error.status === 500) {
+          console.log(error)
+          this.errorMessage = 'Kiểm tra lại email/mật khẩu hoặc trạng thái kích hoạt tài khoản của bạn (kiểm tra email/spam).';
+        } else {
+          this.errorMessage = 'Có lỗi xảy ra. Vui lòng thử lại sau.';
+        }
       },
     })
   }
