@@ -1,0 +1,276 @@
+<style>
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    flex-wrap: wrap;
+    /* để không bị vỡ layout nếu text dài */
+
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #007bff;
+    /* chỉnh màu nếu muốn */
+  }
+
+  .checkbox-text {
+    display: inline;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .terms-link {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .terms-link:hover {
+    text-decoration: underline;
+  }
+
+  .checkmark {
+    height: 18px;
+    width: 18px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    position: relative;
+  }
+
+  .checkbox-label input[type="checkbox"]:checked+.checkmark {
+    background-color: #2196F3;
+  }
+
+  .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .checkbox-label input[type="checkbox"]:checked+.checkmark::after {
+    display: block;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+</style>
+<!-- Background Elements -->
+<div class="background-shapes">
+  <div class="shape shape-1"></div>
+  <div class="shape shape-2"></div>
+  <div class="shape shape-3"></div>
+</div>
+
+<div class="auth-container">
+  <!-- Left Side - App Info -->
+  <div class="auth-info">
+    <div class="info-content">
+      <div class="logo">
+        <i-lucide name="wallet" class="logo-icon"></i-lucide>
+        <h1>My Budget Management</h1>
+      </div>
+      <h2>Bắt đầu hành trình tài chính</h2>
+      <p>Tạo tài khoản để bắt đầu quản lý tài chính cá nhân một cách hiệu quả và thông minh.</p>
+      <div class="features">
+        <div class="feature">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          </svg>
+          <span>Theo dõi chi tiêu dễ dàng</span>
+        </div>
+        <div class="feature">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span>Báo cáo tài chính chi tiết</span>
+        </div>
+        <div class="feature">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Nhắc nhở thanh toán đúng hạn</span>
+        </div>
+        <div class="feature">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+          </svg>
+          <span>Hơn 10,000+ người dùng tin tưởng</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side - Register Form -->
+  <div class="auth-form">
+    <div class="form-container">
+      <div class="form-header">
+        <h2>Tạo tài khoản mới</h2>
+        <p>Điền thông tin để bắt đầu sử dụng My Budget Mannagement</p>
+      </div>
+
+      <!-- Success/Error Messages -->
+      <div *ngIf="successMessage" class="message message-success">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {{ successMessage }}
+      </div>
+
+      <div *ngIf="errorMessage" class="message message-error">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {{ errorMessage }}
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+        <!-- Full Name Field -->
+        <div class="form-group">
+          <label for="fullName">Họ và tên</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <input type="text" id="fullName" formControlName="fullName" placeholder="Nhập họ và tên"
+              [class.error]="f['fullName'].invalid && f['fullName'].touched">
+          </div>
+          <span class="error-message" [class.show]="f['fullName'].invalid && f['fullName'].touched">
+            {{ getFieldError('fullName') }}
+          </span>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="email">Email</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+            </svg>
+            <input type="email" id="email" formControlName="email" placeholder="Nhập email của bạn"
+              [class.error]="f['email'].invalid && f['email'].touched">
+          </div>
+          <span class="error-message" [class.show]="f['email'].invalid && f['email'].touched">
+            {{ getFieldError('email') }}
+          </span>
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <label for="password">Mật khẩu</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+              placeholder="Tạo mật khẩu" [class.error]="f['password'].invalid && f['password'].touched">
+            <button type="button" class="toggle-password" (click)="togglePassword()">
+              <svg *ngIf="!showPassword" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg *ngIf="showPassword" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+              </svg>
+            </button>
+          </div>
+          <!-- Password Strength Indicator -->
+          <div class="password-strength" *ngIf="f['password'].value">
+            <div class="strength-bar">
+              <div class="strength-fill" [ngClass]="passwordStrength.class"></div>
+            </div>
+            <span class="strength-text">{{ passwordStrength.label }}</span>
+          </div>
+          <span class="error-message" [class.show]="f['password'].invalid && f['password'].touched">
+            {{ getFieldError('password') }}
+          </span>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="form-group">
+          <label for="confirmPassword">Xác nhận mật khẩu</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword"
+              formControlName="confirmPassword" placeholder="Nhập lại mật khẩu"
+              [class.error]="(f['confirmPassword'].invalid && f['confirmPassword'].touched) || (registerForm.errors?.['passwordMismatch'] && f['confirmPassword'].touched)">
+            <button type="button" class="toggle-password" (click)="toggleConfirmPassword()">
+              <svg *ngIf="!showConfirmPassword" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg *ngIf="showConfirmPassword" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+              </svg>
+            </button>
+          </div>
+          <span class="error-message"
+            [class.show]="(f['confirmPassword'].invalid && f['confirmPassword'].touched) || (registerForm.errors?.['passwordMismatch'] && f['confirmPassword'].touched)">
+            {{ getFieldError('confirmPassword') }}
+          </span>
+        </div>
+
+        <!-- Terms Checkbox -->
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="terms">
+            <span class="checkmark"></span>
+            <span class="checkbox-text">
+              Tôi đồng ý với
+              <a href="#" class="terms-link">Điều khoản dịch vụ</a>
+              và
+              <a href="#" class="terms-link">Chính sách bảo mật</a>
+            </span>
+          </label>
+          <span class="error-message" [class.show]="f['terms'].invalid && f['terms'].touched">
+            {{ getFieldError('terms') }}
+          </span>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-primary" [class.loading]="isLoading" [disabled]="isLoading">
+          <span class="btn-text" [style.opacity]="isLoading ? '0' : '1'">Tạo tài khoản</span>
+          <div class="loading-spinner" [style.display]="isLoading ? 'block' : 'none'">
+            <svg class="animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
+            </svg>
+          </div>
+        </button>
+      </form>
+
+      <!-- Login Link -->
+      <div class="auth-switch">
+
+        <p>Đã có tài khoản? <a [routerLink]="['/auth/login']">Đăng nhập ngay</a></p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,371 @@
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-container">
+
+    <!-- LOGO -->
+    <div class="nav-logo">
+      <i-lucide name="wallet" class="nav-logo-icon"></i-lucide>
+      <span class="nav-logo-text">My Budget Management</span>
+    </div>
+
+    <!-- NAV LINKS (Desktop) -->
+    <div class="nav-menu" [class.show]="isMenuOpen">
+      <a href="#features" class="nav-link" (click)="closeMenu()">Tính năng</a>
+      <a href="#how-it-works" class="nav-link" (click)="closeMenu()">Cách hoạt động</a>
+      <a href="#pricing" class="nav-link" (click)="closeMenu()">Bảng giá</a>
+      <a href="#testimonials" class="nav-link" (click)="closeMenu()">Đánh giá</a>
+    </div>
+
+    <div class="nav-actions">
+      <button [routerLink]="['/auth/login']" routerLinkActive="router-link-active" class="btn-secondary">Đăng
+        nhập</button>
+      <button [routerLink]="['/auth/register']" class="btn-primary">Dùng thử miễn phí</button>
+    </div>
+
+    <!-- MOBILE TOGGLE -->
+    <button class="nav-toggle" aria-label="Toggle menu" (click)="toggleMenu()">
+      <i-lucide name="menu"></i-lucide>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Quản lý tài chính
+          <span class="gradient-text">thông minh & dễ dàng</span>
+        </h1>
+        <p class="hero-description">
+          Theo dõi chi tiêu, lập ngân sách, chia bill với bạn bè và quản lý nợ một cách hiệu quả.
+          Tất cả trong một ứng <br />dụng đơn giản và thông minh.
+        </p>
+        <div class="hero-actions">
+          <button [routerLink]="['auth/register']" class="btn-primary btn-large">Bắt đầu miễn phí</button>
+          <button (click)="playDemoVideoClick()" class="btn-secondary btn-large">
+            <i-lucide name="circle-play"></i-lucide>
+            Xem demo
+          </button>
+        </div>
+        <div class="trust-indicators">
+          <div class="trust-item">
+            <i-lucide name="users"></i-lucide>
+            <span>50,000+ người dùng</span>
+          </div>
+          <div class="trust-item">
+            <i-lucide name="star"></i-lucide>
+            <span>4.9/5 đánh giá</span>
+          </div>
+          <div class="trust-item">
+            <i-lucide name="shield-check"></i-lucide>
+            <span>Bảo mật tuyệt đối</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="laptop-mockup">
+          <div class="laptop-screen">
+            <div class="dashboard-preview">
+              <div class="dashboard-header">
+                <div class="dashboard-title">Dashboard</div>
+                <div class="dashboard-balance">2,450,000 VND</div>
+              </div>
+              <div class="dashboard-video">
+                <video autoplay muted loop playsinline class="dashboard-preview-video">
+                  <source src="/assets/videos/demo-preview.mp4" type="video/mp4" />
+                  Trình duyệt của bạn không hỗ trợ video.
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Cards -->
+        <div class="floating-cards">
+          <div class="floating-card card-1">
+            <div class="card-icon">
+              <i-lucide name="trending-up"></i-lucide>
+            </div>
+            <div class="card-content">
+              <div class="card-title">Thu nhập tháng</div>
+              <div class="card-value">+15,000,000 VND</div>
+            </div>
+          </div>
+
+          <div class="floating-card card-2">
+            <div class="card-icon">
+              <i-lucide name="shopping-cart"></i-lucide>
+            </div>
+            <div class="card-content">
+              <div class="card-title">Chi tiêu hôm nay</div>
+              <div class="card-value">-250,000 VND</div>
+            </div>
+          </div>
+
+          <div class="floating-card card-3">
+            <div class="card-icon">
+              <i-lucide name="piggy-bank"></i-lucide>
+            </div>
+            <div class="card-content">
+              <div class="card-title">Tiết kiệm</div>
+              <div class="card-value">5,200,000 VND</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Tính năng nổi bật</h2>
+      <p class="section-description">
+        Khám phá những tính năng mạnh mẽ giúp bạn quản lý tài chính hiệu quả hơn
+      </p>
+    </div>
+
+    <div class="features-grid" id="features-grid">
+      <div *ngFor="let feature of featuresData" class="feature-card fade-in">
+        <div class="feature-icon" [style.background]="feature.color">
+          <lucide-icon [name]="feature.icon"></lucide-icon>
+        </div>
+        <h3 class="feature-title">{{feature.title}}</h3>
+        <p class="feature-description">{{feature.description}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works" id="how-it-works">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Cách hoạt động</h2>
+      <p class="section-description">
+        Chỉ với 4 bước đơn giản, bạn đã có thể bắt đầu quản lý tài chính thông minh
+      </p>
+    </div>
+
+    <div class="steps-container" id="steps-container">
+      <!-- Steps will be rendered by JavaScript -->
+      <div *ngFor="let step of stepsData" class="step-card fade-in">
+        <div class="step-number">{{step.number}}</div>
+        <div class="step-icon">
+          <i-lucide class="my-icon" name={{step.icon}}></i-lucide>
+        </div>
+        <h3 class="step-title">{{step.title}}</h3>
+        <p class="step-description">{{step.description}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="statistics">
+  <div class="container">
+    <div class="stats-grid" id="stats-grid">
+      <!-- Stats will be rendered by JavaScript -->
+      <div *ngFor="let stat of statsData" class="stat-card fade-in">
+        <div class="stat-number">{{stat.number}}</div>
+        <div class="stat-label">{{stat.label}}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Khách hàng nói gì về chúng tôi</h2>
+      <p class="section-description">
+        Hàng nghìn người dùng đã tin tưởng và sử dụng My Budget Management
+      </p>
+    </div>
+
+    <div class="testimonials-grid" id="testimonials-grid">
+      <!-- Testimonials will be rendered by JavaScript -->
+      <div *ngFor="let testimonial of testimonialsData" class="testimonial-card fade-in">
+
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">{{ testimonial.avatar }}</div>
+          <div class="testimonial-info">
+            <h4>{{ testimonial.name }}</h4>
+            <p>{{ testimonial.role }}</p>
+          </div>
+        </div>
+
+        <div class="testimonial-rating">
+          <ng-container *ngFor="let _ of createArray(testimonial.rating)">
+            <i-lucide name="star" class="star"></i-lucide>
+          </ng-container>
+        </div>
+
+        <p class="testimonial-content">"{{ testimonial.content }}"</p>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- Pricing Section -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Chọn gói phù hợp với bạn</h2>
+      <p class="section-description">
+        Bắt đầu miễn phí, nâng cấp khi cần thêm tính năng
+      </p>
+    </div>
+
+    <div id="pricing-grid" class="pricing-grid">
+      <div *ngFor="let plan of pricingData" [ngClass]="{ 'popular border-2 border-primary shadow-lg': plan.popular }"
+        class="pricing-card rounded-xl p-6 bg-white fade-in transition-all">
+        <div *ngIf="plan.popular" class="pricing-badge">Phổ biến nhất</div>
+
+        <h3 class="pricing-name">{{ plan.name }}</h3>
+
+        <div class="pricing-price">
+          {{ plan.price === 0 ? '0' : plan.price | number}}<span style="font-size: 2rem;">đ</span>
+        </div>
+
+        <div class="pricing-period">{{ plan.period }}</div>
+
+        <ul class="pricing-features">
+          <li *ngFor="let feature of plan.features">
+            <i data-lucide="check"></i> {{ feature }}
+          </li>
+        </ul>
+
+        <button [routerLink]="['/auth/register']" class="btn-primary w-full">
+          {{ plan.name === 'Miễn phí' ? 'Bắt đầu miễn phí' : 'Chọn gói này' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Sẵn sàng kiểm soát tài chính của bạn?</h2>
+      <p class="cta-description">
+        Tham gia cùng hàng nghìn người dùng đã thay đổi cách quản lý tài chính
+      </p>
+      <button [routerLink]="['/auth/register']" class="btn-primary btn-large">Bắt đầu miễn phí ngay</button>
+
+      <div class="cta-trust">
+        <div class="trust-item">
+          <i-lucide name="credit-card"></i-lucide>
+          <span>Không cần thẻ tín dụng</span>
+        </div>
+        <div class="trust-item">
+          <i-lucide name="clock"></i-lucide>
+          <span>Thiết lập trong 2 phút</span>
+        </div>
+        <div class="trust-item">
+          <i-lucide name="headphones"></i-lucide>
+          <span>Hỗ trợ 24/7</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <i-lucide name="wallet"></i-lucide>
+          <span>My Budget Management</span>
+        </div>
+        <p class="footer-description">
+          Ứng dụng quản lý tài chính thông minh, giúp bạn kiểm soát chi tiêu và đạt được mục tiêu tài
+          chính.
+        </p>
+        <div class="social-links">
+          <a href="#" class="social-link">
+            <i-lucide name="facebook"></i-lucide>
+          </a>
+          <a href="#" class="social-link">
+            <i-lucide name="twitter"></i-lucide>
+          </a>
+          <a href="#" class="social-link">
+            <i-lucide name="instagram"></i-lucide>
+          </a>
+          <a href="#" class="social-link">
+            <i-lucide name="linkedin"></i-lucide>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-column">
+          <h4 class="footer-title">Sản phẩm</h4>
+          <ul class="footer-list">
+            <li><a href="#">Tính năng</a></li>
+            <li><a href="#">Bảng giá</a></li>
+            <li><a href="#">API</a></li>
+            <li><a href="#">Tích hợp</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-title">Công ty</h4>
+          <ul class="footer-list">
+            <li><a href="#">Về chúng tôi</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Tuyển dụng</a></li>
+            <li><a href="#">Liên hệ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-title">Hỗ trợ</h4>
+          <ul class="footer-list">
+            <li><a href="#">Trung tâm trợ giúp</a></li>
+            <li><a href="#">Hướng dẫn</a></li>
+            <li><a href="#">Cộng đồng</a></li>
+            <li><a href="#">Báo lỗi</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-title">Pháp lý</h4>
+          <ul class="footer-list">
+            <li><a href="#">Điều khoản</a></li>
+            <li><a href="#">Bảo mật</a></li>
+            <li><a href="#">Cookie</a></li>
+            <li><a href="#">GDPR</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div *ngIf="isVideoVisible" class="video-modal" (click)="hideVideo()">
+      <div class="video-container" (click)="$event.stopPropagation()">
+        <button class="close-button" (click)="hideVideo()">X</button>
+        <video controls autoplay>
+          <source src="assets/videos/demo-video.mp4" type="video/mp4" />
+          Trình duyệt không hỗ trợ video.
+        </video>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2024 My Budget Management. Tất cả quyền được bảo lưu.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- JavaScript -->
