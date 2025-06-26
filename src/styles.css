@@ -1,4 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900');
+
 * {
   margin: 0;
   padding: 0;
@@ -11,7 +17,7 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, "Noto Sans", sans-serif;
   line-height: 1.6;
   color: #1f2937;
   overflow-x: hidden;

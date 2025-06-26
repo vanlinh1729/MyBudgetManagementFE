@@ -1,0 +1,23 @@
+/* Sidebar component styles */
+.sidebar-transition {
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+} 

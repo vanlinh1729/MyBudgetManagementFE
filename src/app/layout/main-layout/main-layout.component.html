@@ -1,0 +1,22 @@
+<div class="relative flex size-full min-h-screen flex-col bg-slate-50 font-inter overflow-x-hidden">
+  <div class="layout-container flex h-full grow flex-col">
+    <!-- Header -->
+    <app-header (toggleSidebar)="toggleSidebar()"></app-header>
+    
+    <div class="flex flex-1 relative">
+      <!-- Sidebar -->
+      <app-sidebar 
+        [isOpen]="isSidebarOpen" 
+        (closeSidebarEvent)="closeSidebar()"
+        class="md:block"
+      ></app-sidebar>
+      
+      <!-- Main Content Area -->
+      <main class="flex-1 overflow-hidden md:ml-0" [class.blur-sm]="isSidebarOpen && isMobile">
+        <div class="h-full overflow-auto">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
