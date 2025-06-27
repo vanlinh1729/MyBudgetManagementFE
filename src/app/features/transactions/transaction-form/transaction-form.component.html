@@ -1,0 +1,193 @@
+<div class="flex flex-col h-full bg-white">
+  <!-- Header -->
+  <div class="flex items-center justify-between px-4 md:px-6 py-4 border-b border-[#e7edf3]">
+    <div class="flex items-center gap-4">
+      <button 
+        (click)="onCancel()"
+        class="p-2 hover:bg-[#f8fafc] rounded-lg transition-colors"
+      >
+        <i-lucide name="arrow-left" class="w-5 h-5 text-[#4e7397]"></i-lucide>
+      </button>
+      <div>
+        <h1 class="text-[#0e141b] text-xl md:text-2xl font-bold">
+          {{isEditMode ? 'Chỉnh sửa giao dịch' : 'Thêm giao dịch mới'}}
+        </h1>
+        <p class="text-[#4e7397] text-sm">
+          {{isEditMode ? 'Cập nhật thông tin giao dịch' : 'Nhập thông tin giao dịch mới'}}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex items-center justify-center flex-1">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4e7397] mx-auto mb-4"></div>
+      <p class="text-[#4e7397]">Đang tải...</p>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div *ngIf="!isLoading" class="flex-1 overflow-auto">
+    <div class="max-w-2xl mx-auto p-4 md:p-6">
+      <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        
+        <!-- Category Selection -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-[#0e141b]">
+            Danh mục <span class="text-red-500">*</span>
+          </label>
+          <select 
+            formControlName="categoryId"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4e7397] transition-colors"
+            [class.border-red-300]="isFieldInvalid('categoryId')"
+            [class.border-[#e7edf3]]="!isFieldInvalid('categoryId')"
+          >
+            <option value="">Chọn danh mục</option>
+            <option *ngFor="let category of categories" [value]="category.id">
+              {{category.name}} - {{getCategoryTypeLabel(category.type)}}
+            </option>
+          </select>
+          <p *ngIf="isFieldInvalid('categoryId')" class="text-sm text-red-600">
+            {{getFieldError('categoryId')}}
+          </p>
+        </div>
+
+        <!-- Amount -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-[#0e141b]">
+            Số tiền (VNĐ) <span class="text-red-500">*</span>
+          </label>
+          <div class="relative">
+            <input 
+              type="number"
+              formControlName="amount"
+              placeholder="0"
+              step="0.01"
+              min="0"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4e7397] transition-colors"
+              [class.border-red-300]="isFieldInvalid('amount')"
+              [class.border-[#e7edf3]]="!isFieldInvalid('amount')"
+            >
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+              <span class="text-[#4e7397] text-sm">VNĐ</span>
+            </div>
+          </div>
+          <p *ngIf="isFieldInvalid('amount')" class="text-sm text-red-600">
+            {{getFieldError('amount')}}
+          </p>
+        </div>
+
+        <!-- Date -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-[#0e141b]">
+            Ngày giao dịch <span class="text-red-500">*</span>
+          </label>
+          <input 
+            type="date"
+            formControlName="date"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4e7397] transition-colors"
+            [class.border-red-300]="isFieldInvalid('date')"
+            [class.border-[#e7edf3]]="!isFieldInvalid('date')"
+          >
+          <p *ngIf="isFieldInvalid('date')" class="text-sm text-red-600">
+            {{getFieldError('date')}}
+          </p>
+        </div>
+
+        <!-- Note -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-[#0e141b]">
+            Ghi chú
+          </label>
+          <textarea 
+            formControlName="note"
+            rows="3"
+            placeholder="Nhập ghi chú cho giao dịch..."
+            class="w-full px-3 py-2 border border-[#e7edf3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4e7397] transition-colors resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-[#0e141b]">
+            Hình ảnh giao dịch
+          </label>
+          
+          <!-- Current/Preview Image -->
+          <div *ngIf="getImageUrl()" class="mb-4 relative inline-block">
+            <img [src]="getImageUrl()" alt="Transaction Image" class="w-32 h-32 object-cover rounded-lg border border-[#e7edf3]">
+            <button 
+              type="button"
+              (click)="removeImage()"
+              class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors flex items-center justify-center">
+              <i-lucide name="x" class="w-3 h-3"></i-lucide>
+            </button>
+          </div>
+          
+          <!-- Upload Controls -->
+          <div class="flex items-center gap-3">
+            <label for="image-upload" class="cursor-pointer inline-flex items-center px-4 py-2 bg-[#4e7397] text-white text-sm font-medium rounded-lg hover:bg-[#3d5a7a] transition-colors"
+                   [class.opacity-50]="isUploadingImage"
+                   [class.cursor-not-allowed]="isUploadingImage">
+              <i-lucide name="upload" class="w-4 h-4 mr-2"></i-lucide>
+              <span *ngIf="!isUploadingImage">Chọn ảnh</span>
+              <span *ngIf="isUploadingImage">Đang tải...</span>
+            </label>
+            <input 
+              id="image-upload"
+              type="file" 
+              accept="image/*" 
+              (change)="onImageSelected($event)"
+              [disabled]="isUploadingImage"
+              class="hidden">
+          </div>
+          
+          <p class="text-xs text-[#4e7397]">
+            JPG, PNG tối đa 10MB (tùy chọn)
+          </p>
+        </div>
+
+        <!-- Selected Category Info -->
+        <div *ngIf="transactionForm.get('categoryId')?.value" class="p-4 bg-[#f8fafc] rounded-lg">
+          <h3 class="text-sm font-medium text-[#0e141b] mb-2">Thông tin danh mục đã chọn:</h3>
+          <div *ngFor="let category of categories">
+            <div *ngIf="category.id === transactionForm.get('categoryId')?.value" class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center text-lg">
+                {{category.icon}}
+              </div>
+              <div>
+                <p class="font-medium text-[#0e141b]">{{category.name}}</p>
+                <span class="inline-block px-2 py-1 text-xs rounded-full" [ngClass]="getCategoryTypeClass(category.type)">
+                  {{getCategoryTypeLabel(category.type)}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-3 pt-6">
+          <button
+            type="button"
+            (click)="onCancel()"
+            [disabled]="isSubmitting || isUploadingImage"
+            class="flex-1 px-4 py-2 border border-[#e7edf3] text-[#4e7397] rounded-lg hover:bg-[#f8fafc] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Hủy
+          </button>
+          <button
+            type="submit"
+            [disabled]="transactionForm.invalid || isSubmitting || isUploadingImage"
+            class="flex-1 px-4 py-2 bg-[#0e141b] text-white rounded-lg hover:bg-[#1a202c] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+          >
+            <div *ngIf="isSubmitting || isUploadingImage" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            <span *ngIf="isUploadingImage">Đang tải ảnh...</span>
+            <span *ngIf="!isUploadingImage && isSubmitting">{{isEditMode ? 'Đang cập nhật...' : 'Đang thêm...'}}</span>
+            <span *ngIf="!isUploadingImage && !isSubmitting">{{isEditMode ? 'Cập nhật' : 'Thêm giao dịch'}}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> 

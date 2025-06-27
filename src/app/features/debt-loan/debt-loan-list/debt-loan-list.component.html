@@ -1,0 +1,83 @@
+<div class="flex flex-col h-full bg-white">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 md:px-6 py-4 border-b border-[#e7edf3]">
+    <div>
+      <h1 class="text-[#0e141b] text-xl md:text-2xl font-bold">Nợ & Cho vay</h1>
+      <p class="text-[#4e7397] text-sm">Quản lý các khoản nợ và cho vay</p>
+    </div>
+    
+    <button 
+      routerLink="/debt/add"
+      class="flex items-center justify-center gap-2 px-4 py-2 bg-[#0e141b] text-white rounded-xl hover:bg-[#1a202c] transition-colors"
+    >
+      <i-lucide name="plus" class="w-4 h-4"></i-lucide>
+      <span>Thêm mới</span>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div class="flex-1 overflow-auto p-4 md:p-6">
+    <div *ngIf="isLoading" class="flex items-center justify-center h-full">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4e7397] mx-auto mb-4"></div>
+        <p class="text-[#4e7397]">Đang tải...</p>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div *ngFor="let item of debtLoans" 
+           class="bg-white border border-[#e7edf3] rounded-xl p-4 hover:shadow-md transition-shadow">
+        
+        <div class="flex items-center justify-between mb-3">
+          <span class="px-2 py-1 text-xs rounded-full" 
+                [class]="item.isDebt ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'">
+            {{item.isDebt ? 'Nợ' : 'Cho vay'}}
+          </span>
+          <span class="text-sm text-[#4e7397]">{{formatDate(item.paymentDate)}}</span>
+        </div>
+
+        <div class="space-y-2 mb-4">
+          <div class="flex justify-between">
+            <span class="text-sm text-[#4e7397]">Tổng tiền:</span>
+            <span class="font-medium text-[#0e141b]">{{formatCurrency(item.amount)}}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-sm text-[#4e7397]">Còn lại:</span>
+            <span class="font-medium" [class]="item.remainingAmount > 0 ? 'text-red-600' : 'text-green-600'">
+              {{formatCurrency(item.remainingAmount)}}
+            </span>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <button 
+            [routerLink]="['/debt/edit', item.id]"
+            class="flex-1 px-3 py-1 text-sm text-[#4e7397] border border-[#e7edf3] rounded-lg hover:bg-[#f8fafc] transition-colors"
+          >
+            Sửa
+          </button>
+          <button 
+            [routerLink]="['/debt', item.id, 'payments']"
+            class="flex-1 px-3 py-1 text-sm bg-[#0e141b] text-white rounded-lg hover:bg-[#1a202c] transition-colors"
+          >
+            Chi tiết
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && debtLoans.length === 0" class="flex flex-col items-center justify-center h-full text-center">
+      <i-lucide name="credit-card" class="w-16 h-16 text-[#4e7397] mb-4"></i-lucide>
+      <h3 class="text-lg font-medium text-[#0e141b] mb-2">Chưa có khoản nợ hoặc cho vay nào</h3>
+      <p class="text-[#4e7397] mb-4">Bắt đầu bằng cách thêm khoản đầu tiên</p>
+      <button 
+        routerLink="/debt/add"
+        class="flex items-center gap-2 px-4 py-2 bg-[#0e141b] text-white rounded-xl hover:bg-[#1a202c] transition-colors"
+      >
+        <i-lucide name="plus" class="w-4 h-4"></i-lucide>
+        Thêm mới
+      </button>
+    </div>
+  </div>
+</div> 

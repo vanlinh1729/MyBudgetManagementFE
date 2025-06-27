@@ -1,0 +1,469 @@
+/* Clean Header Styling */
+header {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Search styling */
+.search-input:focus {
+  box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1);
+}
+
+/* Dropdown animations */
+.search-results,
+.notification-dropdown,
+.user-dropdown {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button hover states */
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* Mobile menu button */
+.mobile-menu-btn:active {
+  transform: scale(0.95);
+}
+
+/* Notification badge pulse */
+.notification-badge {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #475569;
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .search-container {
+    display: none;
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Header styling với modern design */
+header {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.header-logo {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header-logo:hover {
+  transform: scale(1.1) rotate(3deg);
+  filter: drop-shadow(0 8px 16px rgba(59, 130, 246, 0.3));
+}
+
+/* Modern search styling */
+.search-container {
+  position: relative;
+}
+
+.search-result-item {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-result-item:hover {
+  transform: translateX(8px);
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.9) 100%);
+}
+
+/* User menu animations */
+.user-menu {
+  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.user-avatar {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.user-avatar:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 8px 20px rgba(59, 130, 246, 0.4));
+}
+
+/* Quick action buttons */
+.quick-action-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.quick-action-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translate(-50%, -50%);
+}
+
+.quick-action-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.quick-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Notification bell */
+.notification-bell {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.notification-bell:hover {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, #f8fafc 0%, #e7edf3 100%);
+}
+
+.notification-bell:hover i-lucide {
+  animation: bellRing 0.6s ease-in-out;
+}
+
+@keyframes bellRing {
+  0%, 100% { transform: rotate(0deg); }
+  10%, 30%, 50%, 70% { transform: rotate(10deg); }
+  20%, 40%, 60%, 80% { transform: rotate(-10deg); }
+}
+
+/* Menu items with modern hover effects */
+.menu-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.menu-item:hover::before {
+  width: 100%;
+}
+
+.menu-item:hover {
+  transform: translateX(8px);
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.9) 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, rgba(254, 242, 242, 0.8) 0%, rgba(252, 231, 231, 0.9) 100%);
+  transform: translateX(8px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+/* Gradient text effects */
+.gradient-text {
+  background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glassmorphism effects */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Floating animation for icons */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse animation for status indicators */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+    transform: scale(1.1);
+  }
+}
+
+.status-pulse {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .search-container {
+    min-width: 200px;
+    max-width: 280px;
+  }
+  
+  .menu-item:hover {
+    transform: translateX(4px);
+  }
+}
+
+@media (max-width: 640px) {
+  .search-container {
+    display: none;
+  }
+  
+  header {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .glass-effect {
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Search Container Styles */
+.search-container .form-input:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+}
+
+/* Search Input Placeholder */
+.search-input::placeholder {
+  transition: all 0.2s ease;
+}
+
+.search-input:focus::placeholder {
+  opacity: 0.7;
+  transform: translateX(4px);
+}
+
+/* Menu Item Hover Effects */
+.menu-item:hover {
+  background-color: rgba(248, 250, 252, 0.8);
+  transform: translateX(2px);
+  transition: all 0.2s ease;
+}
+
+.menu-item:hover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background-color: #3b82f6;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Logout Button Special Styling */
+.logout-btn:hover {
+  background-color: rgba(254, 242, 242, 0.8);
+  transform: translateX(2px);
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover::before {
+  background-color: #ef4444;
+}
+
+/* Notification Bell Animation */
+.notification-bell {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.notification-bell:hover {
+  transform: scale(1.05);
+}
+
+.notification-bell:hover i-lucide {
+  animation: ring 0.5s ease-in-out;
+}
+
+@keyframes ring {
+  0%, 20%, 40%, 60%, 80% {
+    transform: rotate(0deg);
+  }
+  10%, 30%, 50%, 70% {
+    transform: rotate(15deg);
+  }
+  15%, 35%, 55%, 75% {
+    transform: rotate(-15deg);
+  }
+}
+
+/* Header Logo Animation */
+.header-logo {
+  transition: transform 0.2s ease;
+}
+
+.header-logo:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .search-container {
+    min-width: 200px;
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 640px) {
+  .search-container {
+    display: none;
+  }
+}
+
+/* Loading Animation for Search */
+.search-loading {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Accessibility Improvements */
+.menu-item:focus,
+.search-result-item:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+  background-color: #eff6ff;
+}
+
+/* Smooth Transitions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom Scrollbar for Search Results */
+.search-results::-webkit-scrollbar {
+  width: 4px;
+}
+
+.search-results::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.search-results::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Quick Navigation Dropdown */
+.quick-nav-dropdown {
+  animation: slideDown 0.2s ease-out;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.quick-nav-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.quick-nav-dropdown::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.quick-nav-dropdown::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.quick-nav-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Quick nav item hover effects */
+.quick-nav-dropdown button:hover {
+  transform: translateX(4px);
+}
+
+.quick-nav-dropdown button:hover .w-8 {
+  transform: scale(1.1);
+}

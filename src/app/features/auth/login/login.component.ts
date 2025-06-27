@@ -74,7 +74,6 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
 
         if (error.status === 500) {
-          console.log(error)
           this.errorMessage = 'Kiểm tra lại email/mật khẩu hoặc trạng thái kích hoạt tài khoản của bạn (kiểm tra email/spam).';
         } else {
           this.errorMessage = 'Có lỗi xảy ra. Vui lòng thử lại sau.';

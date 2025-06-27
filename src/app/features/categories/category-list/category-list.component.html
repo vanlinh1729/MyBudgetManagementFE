@@ -1,0 +1,212 @@
+<div class="flex flex-col h-full bg-white">
+  <!-- Header -->
+  <div class="flex flex-col gap-4 px-4 md:px-6 py-4 border-b border-[#e7edf3]">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <h1 class="text-[#0e141b] text-xl md:text-2xl font-bold">Danh mục & Ngân sách</h1>
+        <p class="text-[#4e7397] text-sm">Quản lý danh mục thu chi và ngân sách</p>
+      </div>
+      
+      <div class="flex flex-col sm:flex-row gap-2">
+        <button 
+          (click)="toggleFilters()"
+          class="flex items-center justify-center gap-2 px-4 py-2 bg-[#e7edf3] text-[#0e141b] rounded-xl hover:bg-[#d1d9e0] transition-colors"
+        >
+          <i-lucide name="sliders-horizontal" class="w-4 h-4"></i-lucide>
+          <span>Bộ lọc</span>
+        </button>
+        
+        <button 
+          routerLink="/categories/add"
+          class="flex items-center justify-center gap-2 px-4 py-2 bg-[#0e141b] text-white rounded-xl hover:bg-[#1a202c] transition-colors"
+        >
+          <i-lucide name="plus" class="w-4 h-4"></i-lucide>
+          <span>Thêm danh mục</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div *ngIf="showFilters" class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-[#f8fafc] rounded-xl">
+      <div>
+        <label class="block text-sm font-medium text-[#0e141b] mb-2">Loại danh mục</label>
+        <select 
+          [(ngModel)]="selectedType" 
+          (change)="onFilterChange()"
+          class="w-full px-3 py-2 border border-[#e7edf3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4e7397]"
+        >
+          <option value="">Tất cả loại</option>
+          <option [value]="CategoryType.Income">Thu nhập</option>
+          <option [value]="CategoryType.Expense">Chi tiêu</option>
+          <option [value]="CategoryType.Transfer">Chuyển khoản</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-[#0e141b] mb-2">Cấp độ</label>
+        <select 
+          [(ngModel)]="selectedLevel" 
+          (change)="onFilterChange()"
+          class="w-full px-3 py-2 border border-[#e7edf3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4e7397]"
+        >
+          <option value="">Tất cả cấp độ</option>
+          <option [value]="CategoryLevel.Parent">Danh mục cha</option>
+          <option [value]="CategoryLevel.Child">Danh mục con</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-[#0e141b] mb-2">Tìm kiếm</label>
+        <input 
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onFilterChange()"
+          placeholder="Tìm theo tên danh mục..."
+          class="w-full px-3 py-2 border border-[#e7edf3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4e7397]"
+        >
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="flex-1 overflow-hidden">
+    <div *ngIf="isLoading" class="flex items-center justify-center h-full">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4e7397] mx-auto mb-4"></div>
+        <p class="text-[#4e7397]">Đang tải...</p>
+      </div>
+    </div>
+
+    <!-- Desktop Table -->
+    <div *ngIf="!isLoading" class="hidden md:block h-full overflow-auto">
+      <table class="w-full">
+        <thead class="bg-[#f8fafc] sticky top-0">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-medium text-[#4e7397] uppercase">Danh mục</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-[#4e7397] uppercase">Loại</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-[#4e7397] uppercase">Cấp độ</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-[#4e7397] uppercase">Ngân sách</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-[#4e7397] uppercase">Chu kỳ</th>
+            <th class="px-4 py-3 text-center text-xs font-medium text-[#4e7397] uppercase">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#e7edf3]">
+          <tr *ngFor="let category of filteredCategories" class="hover:bg-[#f8fafc]">
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-[#e7edf3] flex items-center justify-center text-lg">
+                  {{category.icon}}
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-[#0e141b]">{{category.name}}</p>
+                  <p *ngIf="category.isDefault" class="text-xs text-[#4e7397]">Mặc định</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-3">
+              <span class="inline-block px-2 py-1 text-xs rounded-full" [ngClass]="getCategoryTypeClass(category.type)">
+                {{getCategoryTypeLabel(category.type)}}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-sm text-[#0e141b]">
+              {{getCategoryLevelLabel(category.level)}}
+            </td>
+            <td class="px-4 py-3 text-sm text-[#0e141b]">
+              {{formatCurrency(category.budget)}}
+            </td>
+            <td class="px-4 py-3 text-sm text-[#0e141b]">
+              {{getPeriodLabel(category.period)}}
+            </td>
+            <td class="px-4 py-3 text-center">
+              <div class="flex items-center justify-center gap-2">
+                <button 
+                  [routerLink]="['/categories/edit', category.id]"
+                  class="p-1 text-[#4e7397] hover:text-[#0e141b] transition-colors"
+                >
+                  <i-lucide name="square-pen" class="w-4 h-4"></i-lucide>
+                </button>
+                <button 
+                  *ngIf="!category.isDefault"
+                  (click)="deleteCategory(category.id)"
+                  class="p-1 text-red-500 hover:text-red-700 transition-colors"
+                >
+                  <i-lucide name="trash-2" class="w-4 h-4"></i-lucide>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div *ngIf="!isLoading" class="md:hidden h-full overflow-auto p-4 space-y-4">
+      <div *ngFor="let category of filteredCategories" 
+           class="bg-white border border-[#e7edf3] rounded-xl p-4 hover:shadow-md transition-shadow">
+        
+        <div class="flex items-start justify-between mb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-[#e7edf3] flex items-center justify-center text-lg">
+              {{category.icon}}
+            </div>
+            <div>
+              <h3 class="font-medium text-[#0e141b]">{{category.name}}</h3>
+              <p *ngIf="category.isDefault" class="text-xs text-[#4e7397]">Mặc định</p>
+            </div>
+          </div>
+          <span class="inline-block px-2 py-1 text-xs rounded-full" [ngClass]="getCategoryTypeClass(category.type)">
+            {{getCategoryTypeLabel(category.type)}}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-3 text-sm">
+          <div>
+            <p class="text-[#4e7397]">Cấp độ</p>
+            <p class="text-[#0e141b] font-medium">{{getCategoryLevelLabel(category.level)}}</p>
+          </div>
+          <div>
+            <p class="text-[#4e7397]">Chu kỳ</p>
+            <p class="text-[#0e141b] font-medium">{{getPeriodLabel(category.period)}}</p>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <p class="text-[#4e7397] text-sm">Ngân sách</p>
+          <p class="text-[#0e141b] font-medium">{{formatCurrency(category.budget)}}</p>
+        </div>
+        
+        <div class="flex justify-end gap-2">
+          <button 
+            [routerLink]="['/categories/edit', category.id]"
+            class="flex items-center gap-1 px-3 py-1 text-sm text-[#4e7397] hover:text-[#0e141b] transition-colors"
+          >
+            <i-lucide name="square-pen" class="w-3 h-3"></i-lucide>
+            Sửa
+          </button>
+          <button 
+            *ngIf="!category.isDefault"
+            (click)="deleteCategory(category.id)"
+            class="flex items-center gap-1 px-3 py-1 text-sm text-red-500 hover:text-red-700 transition-colors"
+          >
+            <i-lucide name="trash-2" class="w-3 h-3"></i-lucide>
+            Xóa
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && filteredCategories.length === 0" class="flex flex-col items-center justify-center h-full text-center p-8">
+      <i-lucide name="folder" class="w-16 h-16 text-[#4e7397] mb-4"></i-lucide>
+      <h3 class="text-lg font-medium text-[#0e141b] mb-2">Chưa có danh mục nào</h3>
+      <p class="text-[#4e7397] mb-4">Bắt đầu bằng cách tạo danh mục đầu tiên của bạn</p>
+      <button 
+        routerLink="/categories/add"
+        class="flex items-center gap-2 px-4 py-2 bg-[#0e141b] text-white rounded-xl hover:bg-[#1a202c] transition-colors"
+      >
+        <i-lucide name="plus" class="w-4 h-4"></i-lucide>
+        Thêm danh mục
+      </button>
+    </div>
+  </div>
+</div> 

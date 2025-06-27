@@ -2,7 +2,19 @@
 <div class="flex flex-col max-w-[960px] mx-auto p-4 md:p-6">
   <!-- Welcome Section -->
   <div class="flex flex-wrap justify-between gap-3 mb-6">
-    <h1 class="text-[#0e141b] tracking-light text-2xl md:text-[32px] font-bold leading-tight">Welcome back, Sophia</h1>
+    <div class="flex items-center gap-4">
+      <h1 class="text-[#0e141b] tracking-light text-2xl md:text-[32px] font-bold leading-tight">
+        Chào {{getUserDisplayName()}}! 👋
+      </h1>
+    </div>
+    <button
+      *ngIf="!isLoading"
+      (click)="refreshData()"
+      class="flex items-center gap-2 px-4 py-2 text-sm bg-[#e7edf3] hover:bg-[#d0dbe7] rounded-lg transition-colors"
+    >
+      <i-lucide name="refresh-cw" class="w-4 h-4"></i-lucide>
+      Làm mới
+    </button>
   </div>
 
   <!-- Filter Tabs -->
@@ -15,62 +27,113 @@
     </div>
   </div>
 
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+    <div class="flex items-center gap-3">
+      <div class="w-6 h-6 border-2 border-[#4e7397] border-t-transparent rounded-full animate-spin"></div>
+      <span class="text-[#4e7397]">Đang tải dữ liệu...</span>
+    </div>
+  </div>
+
   <!-- Summary Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-    <div class="flex flex-col gap-2 rounded-xl p-6 bg-[#e7edf3]">
-      <p class="text-[#0e141b] text-base font-medium leading-normal">Total balance</p>
-      <p class="text-[#0e141b] tracking-light text-2xl font-bold leading-tight">$12,345</p>
+  <div *ngIf="!isLoading && dashboardData" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div class="flex flex-col gap-2 rounded-xl p-6 bg-white border border-[#e7edf3] shadow-sm">
+      <div class="flex items-center justify-between">
+        <p class="text-[#4e7397] text-sm font-medium leading-normal">Số dư hiện tại</p>
+        <i-lucide name="wallet" class="w-5 h-5 text-[#4e7397]"></i-lucide>
+      </div>
+      <p class="text-[#0e141b] tracking-light text-2xl font-bold leading-tight">{{formatCurrency(dashboardData.balance)}}</p>
     </div>
-    <div class="flex flex-col gap-2 rounded-xl p-6 bg-[#e7edf3]">
-      <p class="text-[#0e141b] text-base font-medium leading-normal">Monthly income</p>
-      <p class="text-[#0e141b] tracking-light text-2xl font-bold leading-tight">$5,000</p>
+    
+    <div class="flex flex-col gap-2 rounded-xl p-6 bg-white border border-[#e7edf3] shadow-sm">
+      <div class="flex items-center justify-between">
+        <p class="text-[#4e7397] text-sm font-medium leading-normal">Thu nhập tháng</p>
+        <i-lucide name="trending-up" class="w-5 h-5 text-green-500"></i-lucide>
+      </div>
+      <p class="text-[#0e141b] tracking-light text-2xl font-bold leading-tight">{{formatCurrency(dashboardData.totalIncome)}}</p>
     </div>
-    <div class="flex flex-col gap-2 rounded-xl p-6 bg-[#e7edf3]">
-      <p class="text-[#0e141b] text-base font-medium leading-normal">Monthly expenses</p>
-      <p class="text-[#0e141b] tracking-light text-2xl font-bold leading-tight">$2,500</p>
+    
+    <div class="flex flex-col gap-2 rounded-xl p-6 bg-white border border-[#e7edf3] shadow-sm">
+      <div class="flex items-center justify-between">
+        <p class="text-[#4e7397] text-sm font-medium leading-normal">Chi tiêu tháng</p>
+        <i-lucide name="trending-down" class="w-5 h-5 text-red-500"></i-lucide>
+      </div>
+      <p class="text-[#0e141b] tracking-light text-2xl font-bold leading-tight">{{formatCurrency(dashboardData.totalExpense)}}</p>
     </div>
-    <div class="flex flex-col gap-2 rounded-xl p-6 bg-[#e7edf3]">
-      <p class="text-[#0e141b] text-base font-medium leading-normal">Savings goal</p>
-      <p class="text-[#0e141b] tracking-light text-2xl font-bold leading-tight">$1,000</p>
+    
+    <div class="flex flex-col gap-2 rounded-xl p-6 bg-white border border-[#e7edf3] shadow-sm">
+      <div class="flex items-center justify-between">
+        <p class="text-[#4e7397] text-sm font-medium leading-normal">Ngân sách đã dùng</p>
+        <i-lucide name="chart-pie" class="w-5 h-5 text-[#4e7397]"></i-lucide>
+      </div>
+      <p class="text-[#0e141b] tracking-light text-2xl font-bold leading-tight">{{dashboardData.budgetUsage}}%</p>
     </div>
   </div>
 
   <!-- Quick Actions -->
-  <h2 class="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Quick actions</h2>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-    <button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0e141b] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#d0dbe7] transition-colors">
-      <span class="truncate">Add income</span>
-    </button>
-    <button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0e141b] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#d0dbe7] transition-colors">
-      <span class="truncate">Add expense</span>
-    </button>
-    <button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0e141b] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#d0dbe7] transition-colors">
-      <span class="truncate">Transfer</span>
-    </button>
-    <button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0e141b] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#d0dbe7] transition-colors">
-      <span class="truncate">Split bill</span>
-    </button>
+  <div *ngIf="!isLoading" class="mb-8">
+    <h2 class="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Thao tác nhanh</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+      <button 
+        *ngFor="let action of quickActions"
+        [routerLink]="action.route"
+        [queryParams]="action.params"
+        class="flex flex-col items-center justify-center p-4 rounded-xl border border-[#e7edf3] hover:bg-[#f8fafc] transition-all duration-200 group"
+      >
+        <div [class]="action.color + ' w-12 h-12 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform'">
+          <i-lucide [name]="action.icon" class="w-6 h-6"></i-lucide>
+        </div>
+        <span class="text-xs font-medium text-[#0e141b] text-center">{{action.label}}</span>
+      </button>
+    </div>
   </div>
 
   <!-- Budget Overview -->
-  <h2 class="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Budget overview</h2>
-  <div class="mb-8">
+  <div *ngIf="!isLoading" class="mb-8">
+    <h2 class="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Tổng quan ngân sách</h2>
     <div class="flex flex-col gap-2 rounded-xl border border-[#d0dbe7] p-6 bg-white">
-      <p class="text-[#0e141b] text-base font-medium leading-normal mb-4">Spending by category</p>
-      <div class="grid min-h-[180px] grid-flow-col gap-6 grid-rows-[1fr_auto] items-end justify-items-center px-3">
-        <div class="border-[#4e7397] bg-[#e7edf3] border-t-2 w-full" style="height: 90%;"></div>
-        <p class="text-[#4e7397] text-[13px] font-bold leading-normal tracking-[0.015em]">Food</p>
-        <div class="border-[#4e7397] bg-[#e7edf3] border-t-2 w-full" style="height: 20%;"></div>
-        <p class="text-[#4e7397] text-[13px] font-bold leading-normal tracking-[0.015em]">Transportation</p>
-        <div class="border-[#4e7397] bg-[#e7edf3] border-t-2 w-full" style="height: 100%;"></div>
-        <p class="text-[#4e7397] text-[13px] font-bold leading-normal tracking-[0.015em]">Entertainment</p>
-        <div class="border-[#4e7397] bg-[#e7edf3] border-t-2 w-full" style="height: 20%;"></div>
-        <p class="text-[#4e7397] text-[13px] font-bold leading-normal tracking-[0.015em]">Utilities</p>
-        <div class="border-[#4e7397] bg-[#e7edf3] border-t-2 w-full" style="height: 30%;"></div>
-        <p class="text-[#4e7397] text-[13px] font-bold leading-normal tracking-[0.015em]">Rent</p>
-        <div class="border-[#4e7397] bg-[#e7edf3] border-t-2 w-full" style="height: 80%;"></div>
-        <p class="text-[#4e7397] text-[13px] font-bold leading-normal tracking-[0.015em]">Other</p>
+      <div class="flex items-center justify-between mb-4">
+        <p class="text-[#0e141b] text-base font-medium leading-normal">Chi tiêu theo danh mục</p>
+        <button 
+          routerLink="/categories"
+          class="text-sm text-[#4e7397] hover:text-[#0e141b] transition-colors"
+        >
+          Xem tất cả →
+        </button>
       </div>
+      
+      <div *ngIf="categorySummary.length > 0; else noCategoryData" class="grid min-h-[180px] grid-flow-col gap-6 grid-rows-[1fr_auto] items-end justify-items-center px-3">
+        <ng-container *ngFor="let category of categorySummary">
+          <div 
+            class="bg-gradient-to-t from-[#4e7397] to-[#6b8bb3] rounded-t-md w-full transition-all duration-300 hover:opacity-80" 
+            [style.height]="getCategoryBarHeight(category.totalAmount)"
+            [title]="formatCurrency(category.totalAmount)"
+          ></div>
+          <div class="text-center">
+            <p class="text-[#4e7397] text-[12px] font-bold leading-normal tracking-[0.015em] mb-1">{{category.categoryName}}</p>
+            <p class="text-[#0e141b] text-[10px] font-medium">{{formatCurrency(category.totalAmount)}}</p>
+            <div *ngIf="category.budgetAmount" class="w-full bg-gray-200 rounded-full h-1 mt-1">
+              <div 
+                class="bg-[#4e7397] h-1 rounded-full transition-all duration-300"
+                [style.width]="category.percentage + '%'"
+              ></div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      
+      <ng-template #noCategoryData>
+        <div class="flex flex-col items-center justify-center py-12 text-center">
+          <i-lucide name="chart-pie" class="w-12 h-12 text-[#d0dbe7] mb-4"></i-lucide>
+          <p class="text-[#4e7397] mb-2">Chưa có dữ liệu chi tiêu</p>
+          <button 
+            routerLink="/transactions/add"
+            class="text-sm text-[#4e7397] hover:text-[#0e141b] transition-colors"
+          >
+            Thêm giao dịch đầu tiên
+          </button>
+        </div>
+      </ng-template>
     </div>
   </div>
 
@@ -102,103 +165,67 @@
   </div>
 
   <!-- Recent Transactions -->
-  <h2 class="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Recent transactions</h2>
-  
-  <!-- Search -->
-  <div class="mb-4">
-    <label class="flex flex-col h-12 w-full">
-      <div class="flex w-full flex-1 items-stretch rounded-xl h-full">
-        <div class="text-[#4e7397] flex border-none bg-[#e7edf3] items-center justify-center pl-4 rounded-l-xl border-r-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-            <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
-          </svg>
+  <div *ngIf="!isLoading" class="mb-8">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em]">Giao dịch gần đây</h2>
+      <button 
+        routerLink="/transactions"
+        class="text-sm text-[#4e7397] hover:text-[#0e141b] transition-colors"
+      >
+        Xem tất cả →
+      </button>
+    </div>
+    
+    <!-- Transactions Table -->
+    <div class="overflow-hidden rounded-xl border border-[#d0dbe7] bg-white">
+      <div *ngIf="recentTransactions.length > 0; else noTransactions" class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="bg-slate-50">
+              <th class="px-4 py-3 text-left text-[#0e141b] text-sm font-medium leading-normal">Ngày</th>
+              <th class="px-4 py-3 text-left text-[#0e141b] text-sm font-medium leading-normal">Mô tả</th>
+              <th class="px-4 py-3 text-left text-[#0e141b] text-sm font-medium leading-normal">Danh mục</th>
+              <th class="px-4 py-3 text-left text-[#0e141b] text-sm font-medium leading-normal">Số tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of recentTransactions" class="border-t border-t-[#d0dbe7] hover:bg-[#f8fafc] transition-colors">
+              <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">
+                {{transaction.date | date:'dd/MM/yyyy'}}
+              </td>
+              <td class="px-4 py-3 text-[#0e141b] text-sm font-normal leading-normal">
+                <div class="flex items-center gap-2">
+                  <span class="text-lg">{{transaction.category.icon}}</span>
+                  <span>{{transaction.note || 'Không có ghi chú'}}</span>
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#e7edf3] text-[#0e141b]">
+                  {{transaction.category.name}}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-sm font-medium" 
+                  [class]="transaction.amount >= 0 ? 'text-green-600' : 'text-red-600'">
+                {{formatCurrency(transaction.amount)}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <ng-template #noTransactions>
+        <div class="flex flex-col items-center justify-center py-12 text-center">
+          <i-lucide name="receipt" class="w-12 h-12 text-[#d0dbe7] mb-4"></i-lucide>
+          <p class="text-[#4e7397] mb-2">Chưa có giao dịch nào</p>
+          <button 
+            routerLink="/transactions/add"
+            class="inline-flex items-center gap-2 px-4 py-2 text-sm bg-[#4e7397] text-white rounded-lg hover:bg-[#3d5a7a] transition-colors"
+          >
+            <i-lucide name="plus" class="w-4 h-4"></i-lucide>
+            Thêm giao dịch đầu tiên
+          </button>
         </div>
-        <input
-          placeholder="Search transactions"
-          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border-none bg-[#e7edf3] focus:border-none h-full placeholder:text-[#4e7397] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
-          value=""
-        />
-      </div>
-    </label>
-  </div>
-
-  <!-- Filter Button -->
-  <div class="flex gap-3 flex-wrap mb-4">
-    <button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#e7edf3] pl-4 pr-2 hover:bg-[#d0dbe7] transition-colors">
-      <p class="text-[#0e141b] text-sm font-medium leading-normal">Filter</p>
-      <div class="text-[#0e141b]">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-          <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
-        </svg>
-      </div>
-    </button>
-  </div>
-
-  <!-- Transactions Table -->
-  <div class="overflow-hidden rounded-xl border border-[#d0dbe7] bg-white">
-    <div class="overflow-x-auto">
-      <table class="w-full">
-        <thead>
-          <tr class="bg-slate-50">
-            <th class="px-4 py-3 text-left text-[#0e141b] text-sm font-medium leading-normal">Date</th>
-            <th class="px-4 py-3 text-left text-[#0e141b] text-sm font-medium leading-normal">Description</th>
-            <th class="px-4 py-3 text-left text-[#0e141b] text-sm font-medium leading-normal">Category</th>
-            <th class="px-4 py-3 text-left text-[#0e141b] text-sm font-medium leading-normal">Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-t border-t-[#d0dbe7]">
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">2024-07-15</td>
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">Grocery shopping at Whole Foods</td>
-            <td class="px-4 py-3">
-              <button class="flex items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#e7edf3] text-[#0e141b] text-sm font-medium leading-normal">
-                <span class="truncate">Food</span>
-              </button>
-            </td>
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">-$150</td>
-          </tr>
-          <tr class="border-t border-t-[#d0dbe7]">
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">2024-07-14</td>
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">Gas station</td>
-            <td class="px-4 py-3">
-              <button class="flex items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#e7edf3] text-[#0e141b] text-sm font-medium leading-normal">
-                <span class="truncate">Transportation</span>
-              </button>
-            </td>
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">-$50</td>
-          </tr>
-          <tr class="border-t border-t-[#d0dbe7]">
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">2024-07-13</td>
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">Movie night</td>
-            <td class="px-4 py-3">
-              <button class="flex items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#e7edf3] text-[#0e141b] text-sm font-medium leading-normal">
-                <span class="truncate">Entertainment</span>
-              </button>
-            </td>
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">-$30</td>
-          </tr>
-          <tr class="border-t border-t-[#d0dbe7]">
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">2024-07-12</td>
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">Electricity bill</td>
-            <td class="px-4 py-3">
-              <button class="flex items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#e7edf3] text-[#0e141b] text-sm font-medium leading-normal">
-                <span class="truncate">Utilities</span>
-              </button>
-            </td>
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">-$100</td>
-          </tr>
-          <tr class="border-t border-t-[#d0dbe7]">
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">2024-07-11</td>
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">Rent payment</td>
-            <td class="px-4 py-3">
-              <button class="flex items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#e7edf3] text-[#0e141b] text-sm font-medium leading-normal">
-                <span class="truncate">Rent</span>
-              </button>
-            </td>
-            <td class="px-4 py-3 text-[#4e7397] text-sm font-normal leading-normal">-$1,500</td>
-          </tr>
-        </tbody>
-      </table>
+      </ng-template>
     </div>
   </div>
 </div> 

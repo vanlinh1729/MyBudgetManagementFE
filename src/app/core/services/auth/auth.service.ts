@@ -8,15 +8,13 @@ export interface LoginDto {
   email: string;
   password: string;
 }
+
 export interface RegisterDto {
   email: string;
   password: string;
   fullName: string;
 }
-export interface ActivateAccountDto {
-  email: string;
-  code: string;
-}
+
 export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
@@ -45,12 +43,12 @@ export class AuthService {
     return this.http.post<void>(`${this.baseUrl}/register`, data);
   }
 
-  activateAccount(data: ActivateAccountDto): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/activate-account`, data);
+  activateAccount(token: string): Observable<void> {
+    return this.http.get<void>(`${this.baseUrl}/activate?token=${token}`);
   }
 
   resendActivation(email: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/resend-activation`, { email });
+    return this.http.get<void>(`${this.baseUrl}/resend-activation-email?email=${email}`);
   }
 
   refreshToken(): Observable<AuthResponse> {
@@ -74,6 +72,10 @@ export class AuthService {
 
   getToken(): string | null {
     return this.tokenService.accessToken;
+  }
+
+  getRefreshToken(): string | null {
+    return this.tokenService.refreshToken;
   }
 
   isLoggedIn(): boolean {

@@ -1,0 +1,82 @@
+<div class="flex flex-col h-full bg-white">
+  <!-- Header -->
+  <div class="px-4 md:px-6 py-4 border-b border-[#e7edf3]">
+    <h1 class="text-[#0e141b] text-xl md:text-2xl font-bold">Báo cáo</h1>
+    <p class="text-[#4e7397] text-sm">Phân tích chi tiêu theo danh mục</p>
+  </div>
+
+  <!-- Content -->
+  <div class="flex-1 overflow-auto p-4 md:p-6">
+    <div *ngIf="isLoading" class="flex items-center justify-center h-full">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4e7397] mx-auto mb-4"></div>
+        <p class="text-[#4e7397]">Đang tải...</p>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading" class="space-y-6">
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-green-100 text-sm">Tổng thu nhập</p>
+              <p class="text-2xl font-bold">{{formatCurrency(getTotalIncome())}}</p>
+            </div>
+            <i-lucide name="trending-up" class="w-8 h-8 text-green-200"></i-lucide>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-xl p-6 text-white">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-red-100 text-sm">Tổng chi tiêu</p>
+              <p class="text-2xl font-bold">{{formatCurrency(getTotalExpense())}}</p>
+            </div>
+            <i-lucide name="trending-down" class="w-8 h-8 text-red-200"></i-lucide>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-blue-100 text-sm">Số dư</p>
+              <p class="text-2xl font-bold">{{formatCurrency(getBalance())}}</p>
+            </div>
+            <i-lucide name="wallet" class="w-8 h-8 text-blue-200"></i-lucide>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Summary -->
+      <div class="bg-white border border-[#e7edf3] rounded-xl p-6">
+        <h2 class="text-lg font-semibold text-[#0e141b] mb-4">Chi tiêu theo danh mục</h2>
+        
+        <div *ngIf="categorySummary.length === 0" class="text-center py-8">
+          <i-lucide name="chart-pie" class="w-12 h-12 text-[#4e7397] mx-auto mb-3"></i-lucide>
+          <p class="text-[#4e7397]">Chưa có dữ liệu để hiển thị</p>
+        </div>
+
+        <div *ngIf="categorySummary.length > 0" class="space-y-4">
+          <div *ngFor="let category of categorySummary" class="flex items-center justify-between p-3 bg-[#f8fafc] rounded-lg">
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-medium text-[#0e141b]">{{category.categoryName}}</span>
+                <span class="text-sm text-[#4e7397]">{{category.percentage}}%</span>
+              </div>
+              <div class="w-full bg-[#e7edf3] rounded-full h-2">
+                <div class="bg-[#4e7397] h-2 rounded-full" [style.width.%]="category.percentage"></div>
+              </div>
+            </div>
+            <div class="ml-4 text-right">
+              <p class="font-semibold text-[#0e141b]">{{formatCurrency(category.totalAmount)}}</p>
+              <p *ngIf="category.budgetAmount" class="text-xs text-[#4e7397]">
+                / {{formatCurrency(category.budgetAmount)}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
